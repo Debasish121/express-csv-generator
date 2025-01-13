@@ -44,7 +44,7 @@ This project is an Express.js application that integrates data from three API en
 3. Start the Express server:
 
    ```bash
-   node run dev
+   npm run dev
    ```
 
 4. The server will start on http://localhost:3000.
