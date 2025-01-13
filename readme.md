@@ -58,7 +58,7 @@ This project is an Express.js application that integrates data from three API en
   2. Send a GET request to:
 
      ```bash
-          http://localhost:3000/generate-csv
+     http://localhost:3000/generate-csv
      ```
 
   3. If successful, you'll receive a response like this:
