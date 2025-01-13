@@ -31,16 +31,43 @@ app.get("/generate-csv", async (req, res) => {
     const posts = postsResponse.data;
     const comments = commentsResponse.data;
 
-    // Map data by 'id' and extract the required fields
-    const maxRows = Math.max(users.length, posts.length, comments.length);
-    const rows = Array.from({ length: maxRows }, (_, i) => ({
-      name: users[i]?.name || "",
-      title: posts[i]?.title || "",
-      body: comments[i]?.body || "",
+    // Create a map to store data based on 'id'
+    const dataMap = {};
+
+    // Map user data by 'id'
+    users.forEach(user => {
+      if (!dataMap[user.id]) {
+        dataMap[user.id] = {};
+      }
+      dataMap[user.id].name = user.name;
+    });
+
+    // Map post data by 'id'
+    posts.forEach(post => {
+      if (!dataMap[post.id]) {
+        dataMap[post.id] = {};
+      }
+      dataMap[post.id].title = post.title;
+    });
+
+    // Map comment data by 'id'
+    comments.forEach(comment => {
+      if (!dataMap[comment.id]) {
+        dataMap[comment.id] = {};
+      }
+      dataMap[comment.id].body = comment.body;
+    });
+
+    // Convert the data map to an array of rows
+    const rows = Object.keys(dataMap).map(id => ({
+      id,
+      name: dataMap[id].name || "",
+      title: dataMap[id].title || "",
+      body: dataMap[id].body || "",
     }));
 
     // Define CSV headers
-    const csvHeaders = ["name", "title", "body"];
+    const csvHeaders = ["id", "name", "title", "body"];
     const csvData = parse(rows, { fields: csvHeaders });
 
     // Write the CSV file to disk
